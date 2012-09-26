@@ -7,8 +7,12 @@
 				$.get("/messages", function(data) {
 					$.each(data, function(i, message) {
 						var time = "4:38PM on 9/26/2012";
-						$('div[id="messageContainer"]').prepend('<div id="message">' + message.fields.message + '<div id="timeStamp">' + time + '</div></div>');
-					})
+						$('div[id="messageContainer"]').prepend('<div class="message">' + message.fields.message + '<a href="#" class="delete">x</a><div class="timeStamp">' + time + '</div></div>');
+						
+						$('a').click(function (event) {
+							$(this).parent().animate({ top: -25 }, 500, function() { $(this).remove(); });		
+						});
+					});
 				});
 		
 				// handler for submissions
@@ -16,9 +20,13 @@
                     var input = $('input[name="text"]').val();
                     $.post("/messages", { message: input }, function() {
                         var time = "4:38PM on 9/26/2012";
-                        $newMessageDiv = $('<div id="message">' + input + '<div id="timeStamp">' + time + '</div></div>');
+                        $newMessageDiv = $('<div class="message">' + input + '<a href="#" class="delete">x</a><div class="timeStamp">' + time + '</div></div>');
 
                         $('div[id="messageContainer"]').prepend($newMessageDiv);
+                        
+						$('a').click(function (event) {
+							$(this).parent().animate({ top: -25 }, 500, function() { $(this).remove(); });		
+						});
 
                         $newMessageDiv.css("top", "-25px");
                         $newMessageDiv.css("opacity", "0");
@@ -26,7 +34,7 @@
 
                         // clear the text box
                         $('input[name="text"]').val('');
-				});
+                    });
                 };
 
                 $('input[name="submit"]').click(function(event){
@@ -98,7 +106,7 @@
 				-webkit-border-radius: 10px;
 			}
 			
-			#message {
+			.message {
 				position: relative;
 				background-color: #2D3C4A;
 				font-size: 10pt;
@@ -112,11 +120,29 @@
 				-webkit-box-shadow: 0px 2px 0 #1D2730;			
 			}
 			
-			#timeStamp {
+			.timeStamp {
 				text-align: right;
 				font-size: 7pt;
 				color: #888;
 				margin-top: 5px;
+				clear: right;
+			}
+			
+			.delete {
+				color: #FFF;
+				text-decoration: none;
+				text-align: center;
+				font-size: 7pt;
+				float: right;
+				background-color: #BF3000;
+				padding: 2px;
+				width: 10px;
+				height: 10px;
+				line-height: 8px;
+				margin-bottom: 5px;
+				border-radius: 2px;
+				-moz-border-radius: 2px;
+				-webkit-border-radius: 2px;
 			}
 		</style>
 	</head>
