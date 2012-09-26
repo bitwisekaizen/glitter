@@ -1,21 +1,115 @@
-Gleet: <input name="text" type="text" size="100" /><input name="submit" value="Submit" type="submit" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
-        // load all messages when page loads
-        $.get("/messages", function(data) {
-            $.each(data, function(i, message) {
-                $('div[id="messages"]').append(message.fields.message);
-            })
-        });
-
-        // deal with submissions
-        $('input[name="submit"]').click(function(event){
-            var input = $('input[name="text"]').val();
-            $.post("/messages", {message: input}, function() {
-                $('div[id="messages"]').append(input);
-            });
-        });
-    });
-</script>
-<div id="messages" />
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				// load all messages when page loads
+				$.get("/messages", function(data) {
+					$.each(data, function(i, message) {
+						var time = "4:38PM on 9/26/2012";
+						$('div[id="messageContainer"]').prepend('<div id="message">' + message.fields.message + '<div id="timeStamp">' + time + '</div></div>');
+					})
+				});
+		
+				// deal with submissions
+				$('input[name="submit"]').click(function(event){
+					var input = $('input[name="text"]').val();
+					$.post("/messages", { message: input }, function() {
+						var time = "4:38PM on 9/26/2012";
+						$newMessageDiv = $('<div id="message">' + input + '<div id="timeStamp">' + time + '</div></div>');
+						
+						$('div[id="messageContainer"]').prepend($newMessageDiv);
+						
+						$newMessageDiv.css("top", "-25px");
+						$newMessageDiv.css("opacity", "0");
+						$newMessageDiv.animate({ top: 0, opacity: 1}, 500);
+					});
+				});
+			});
+		</script>
+		<style>
+			body {
+				font-family: Verdana, sans-serif;
+				background-color: #303E4A;
+				color: #FFF;
+			}
+			
+			#mainContainer {
+				margin-top: 50px;
+				margin-left: 50px;
+			}
+			
+			#formContainer {
+				margin-bottom: 25px;
+			}
+			
+			#formContainer input {
+				border: 0px;
+				padding: 5px;
+				border-radius: 5px;
+				-moz-border-radius: 5px;
+				-webkit-border-radius: 5px;
+			}
+			
+			#gleetLabel {
+				float: left;
+				clear: none;
+				width: 80px;
+				color: #E2FF78;
+			}
+			
+			#text {
+				color: #444;
+				width: 800px;
+				margin-right: 10px;
+			}
+			
+			#submit {
+				background-color: #FAB361;
+				font-weight: bold;
+				color: #FFF;
+				border: 0px;
+				padding: 4px;
+			}
+			
+			#messageContainer {
+				background-color: #26313B;
+				padding: 20px;
+				margin-left: 80px;
+				width: 760px;
+				border-radius: 10px;
+				-moz-border-radius: 10px;
+				-webkit-border-radius: 10px;
+			}
+			
+			#message {
+				position: relative;
+				background-color: #2D3C4A;
+				font-size: 10pt;
+				margin-bottom: 10px;
+				padding: 5px;
+				border-radius: 5px;
+				-moz-border-radius: 5px;
+				-webkit-border-radius: 5px;
+				box-shadow: 0px 2px 0 #1D2730;	
+				-moz-box-shadow: 0px 2px 0 #1D2730;
+				-webkit-box-shadow: 0px 2px 0 #1D2730;			
+			}
+			
+			#timeStamp {
+				text-align: right;
+				font-size: 7pt;
+				color: #888;
+				margin-top: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="mainContainer">
+			<div id="formContainer">
+				<div id="gleetLabel">Gleet:</div><input name="text" id="text" type="text"/><input name="submit" id="submit" value="Submit" type="submit" />
+			</div>
+			<div id="messageContainer" />
+		</div>
+	</body>
+</html>
