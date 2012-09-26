@@ -1,10 +1,12 @@
 from django.conf.urls import patterns, include, url
+from backend.views import Messages
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^messages/?', Messages.as_view()),
     # Examples:
     # url(r'^$', 'glitter.views.home', name='home'),
     # url(r'^glitter/', include('glitter.foo.urls')),
