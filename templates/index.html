@@ -11,25 +11,36 @@
 					})
 				});
 		
-				// deal with submissions
-				$('input[name="submit"]').click(function(event){
-					var input = $('input[name="text"]').val();
-					$.post("/messages", { message: input }, function() {
-						var time = "4:38PM on 9/26/2012";
-						$newMessageDiv = $('<div id="message">' + input + '<div id="timeStamp">' + time + '</div></div>');
-						
-						$('div[id="messageContainer"]').prepend($newMessageDiv);
-						
-						$newMessageDiv.css("top", "-25px");
-						$newMessageDiv.css("opacity", "0");
-						$newMessageDiv.animate({ top: 0, opacity: 1}, 500);
+				// handler for submissions
+                var doSubmit = function() {
+                    var input = $('input[name="text"]').val();
+                    $.post("/messages", { message: input }, function() {
+                        var time = "4:38PM on 9/26/2012";
+                        $newMessageDiv = $('<div id="message">' + input + '<div id="timeStamp">' + time + '</div></div>');
+
+                        $('div[id="messageContainer"]').prepend($newMessageDiv);
+
+                        $newMessageDiv.css("top", "-25px");
+                        $newMessageDiv.css("opacity", "0");
+                        $newMessageDiv.animate({ top: 0, opacity: 1}, 500);
 
                         // clear the text box
                         $('input[name="text"]').val('');
-					});
 				});
+                };
 
+                $('input[name="submit"]').click(function(event){
+                    doSubmit();
+                });
 
+                // deal with enter keypresses
+                $('input[name="text"]').keypress(function(event) {
+                    var keyCode = event.keyCode ? event.keyCode : event.which;
+                    if (keyCode == '13') {
+                        doSubmit();
+                    }
+                    event.stopPropagation();
+                });
 			});
 		</script>
 		<style>
