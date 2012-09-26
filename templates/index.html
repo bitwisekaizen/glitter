@@ -23,8 +23,13 @@
 						$newMessageDiv.css("top", "-25px");
 						$newMessageDiv.css("opacity", "0");
 						$newMessageDiv.animate({ top: 0, opacity: 1}, 500);
+
+                        // clear the text box
+                        $('input[name="text"]').val('');
 					});
 				});
+
+
 			});
 		</script>
 		<style>
