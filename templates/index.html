@@ -1,9 +1,21 @@
-{% if messages %}
-    <ul>
-        {% for message in messages %}
-            {{ message }}<br/>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No messages are available.</p>
-{% endif %}
+Gleet: <input name="text" type="text" size="100" /><input name="submit" value="Submit" type="submit" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // load all messages when page loads
+        $.get("/messages", function(data) {
+            $.each(data, function(i, message) {
+                $('div[id="messages"]').append(message.fields.message);
+            })
+        });
+
+        // deal with submissions
+        $('input[name="submit"]').click(function(event){
+            var input = $('input[name="text"]').val();
+            $.post("/messages", {message: input}, function() {
+                $('div[id="messages"]').append(input);
+            });
+        });
+    });
+</script>
+<div id="messages" />

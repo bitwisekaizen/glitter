@@ -1,5 +1,5 @@
 from django.db import models
 
 # Create your models here.
-class Message(models.Model):
-    text = models.CharField(max_length=100)
+class Gleet(models.Model):
+    message = models.CharField(max_length=100)
