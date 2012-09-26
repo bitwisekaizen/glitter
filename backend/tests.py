@@ -26,3 +26,10 @@ class SimpleTest(TestCase):
 
         response = c.delete("/messages")
         self.assertEqual(200, response.status_code)
+
+    def successResponseOnNavigationToHomePage(self):
+        c = Client()
+
+        response = c.get("/")
+
+        self.assertEqual(200, response.status_code)

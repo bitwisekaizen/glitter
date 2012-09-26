@@ -6,6 +6,7 @@ from backend.views import Messages
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', 'backend.views.index'),
     url(r'^messages/?', Messages.as_view()),
     # Examples:
     # url(r'^$', 'glitter.views.home', name='home'),

@@ -1,9 +1,14 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.core import serializers
+from django.shortcuts import render_to_response
 from backend.models import Message
 
 from simple_rest import Resource
+
+def index(request):
+    messages = Message.objects.all()
+    return render_to_response('backend/index.html', {'messages': messages})
 
 class Messages(Resource):
     def get(self, request, *args, **kwargs):
