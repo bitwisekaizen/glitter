@@ -11,7 +11,7 @@ class Messages(Resource):
         return HttpResponse(messages, content_type='application/json', status=200)
 
     def post(self, request, *args, **kwargs):
-        Message.objects.create(text = 'This is my first Gleet!')
+        Message.objects.create(text = request.POST.get('text'))
         return HttpResponse(status=200)
 
     def delete(self, request, *args, **kwargs):

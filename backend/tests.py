@@ -13,14 +13,16 @@ from backend.models import Message
 
 class SimpleTest(TestCase):
     def canPostAndRetrieveMessage(self):
+        textToPost = 'a fun text message to Gleet!'
+
         c = Client()
 
-        response = c.post("/messages")
+        response = c.post("/messages", {'text' : textToPost})
         self.assertEqual(200, response.status_code)
 
         response = c.get("/messages")
         for message in serializers.deserialize("json", response.content):
-            self.assertEqual('This is my first Gleet!', message.object.text)
+            self.assertEqual(textToPost, message.object.text)
 
         response = c.delete("/messages")
         self.assertEqual(200, response.status_code)
