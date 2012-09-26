@@ -8,7 +8,7 @@ from simple_rest import Resource
 
 def index(request):
     messages = Message.objects.all()
-    return render_to_response('backend/index.html', {'messages': messages})
+    return render_to_response('index.html', {'messages': messages})
 
 class Messages(Resource):
     def get(self, request, *args, **kwargs):
