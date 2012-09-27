@@ -5,13 +5,15 @@
             function formatDate(messageDate) {
                 var time;
                 var hours = messageDate.getHours();
+                var minutes = messageDate.getMinutes();
                 var amOrPm = hours < 11 ? "AM" : "PM";
                 if (hours == 0) {
                     hours += 12;
                 } else if (hours > 12) {
                     hours -= 12;
                 }
-                time = hours + ":" + messageDate.getMinutes() + amOrPm + " on " + messageDate.getMonth() + "/" + messageDate.getDay() + "/" + messageDate.getFullYear();
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                time = hours + ":" + minutes + amOrPm + " on " + messageDate.getMonth() + "/" + messageDate.getDay() + "/" + messageDate.getFullYear();
                 return time;
             }
 			$(document).ready(function(){
