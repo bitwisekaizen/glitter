@@ -21,6 +21,18 @@
                     $(this).parent().animate({ top: -25, opacity: 0 }, 500, function() { $(this).remove(); });
                 });
             }
+            function addMessage(pk, message, time) {
+                $newMessageDiv = $('<div name="message-' + pk + '" class="message">' + message + '<a href="#" class="delete">x</a><div class="timeStamp">' + time + '</div></div>');
+
+                $newMessageDiv.css("top", "-25px");
+                $newMessageDiv.css("opacity", "0");
+                $newMessageDiv.animate({ top: 0, opacity: 1}, 500);
+
+                $('div[id="messageContainer"]').prepend($newMessageDiv);
+
+                registerRemoveHandler(pk);
+            };
+
             $(document).ready(function(){
 				// load all messages when page loads
 				$.get("/messages", function(data) {
@@ -31,27 +43,17 @@
                             time = formatDate(messageDate);
                         }
 
-                        $newMessageDiv = '<div name="message-' + message.pk + '" class="message">' + message.fields.message + '<a href="#" class="delete">x</a><div class="timeStamp">' + time + '</div></div>';
-						$('div[id="messageContainer"]').prepend($newMessageDiv);
-
-                        registerRemoveHandler(message.pk);
+                        addMessage(message.pk, message.fields.message, time);
 					});
 				});
 		
 				// handler for submissions
                 var doSubmit = function() {
                     var input = $('input[name="text"]').val();
-                    $.post("/messages", { message: input }, function() {
-                        var time = formatDate(new Date());
-                        $newMessageDiv = $('<div class="message">' + input + '<a href="#" class="delete">x</a><div class="timeStamp">' + time + '</div></div>');
-
-                        $('div[id="messageContainer"]').prepend($newMessageDiv);
-
-                        registerRemoveHandler(0);
-
-                        $newMessageDiv.css("top", "-25px");
-                        $newMessageDiv.css("opacity", "0");
-                        $newMessageDiv.animate({ top: 0, opacity: 1}, 500);
+                    $.post("/messages", { message: input }, function(data) {
+                        $.each(data, function(i, message) {
+                            addMessage(message.pk, message.fields.message, formatDate(new Date()));
+                        });
 
                         // clear the text box
                         $('input[name="text"]').val('');

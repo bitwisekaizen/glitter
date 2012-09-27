@@ -18,14 +18,22 @@ class SimpleTest(TestCase):
 
         response = self.client.post("/messages", {'message' : textToPost})
         self.assertEqual(200, response.status_code)
+        message = list(serializers.deserialize("json", response.content))[0]
+        self.assertEqual(textToPost, message.object.message)
 
         response = self.client.get("/messages")
-        for message in serializers.deserialize("json", response.content):
-            self.assertEqual(textToPost, message.object.message)
-            self.assertNotEqual(None, message.object.timestamp)
+        deserializedMessage = None
+        messages = serializers.deserialize("json", response.content)
+        for message in messages:
+            deserializedMessage = message.object
+            self.assertEqual(textToPost, deserializedMessage.message)
+            self.assertNotEqual(None, deserializedMessage.timestamp)
 
-        response = self.client.delete("/messages")
+        response = self.client.delete("/messages", {'id' : deserializedMessage.id})
         self.assertEqual(200, response.status_code)
+
+        messages = serializers.deserialize("json", self.client.get("/messages").content)
+        self.assertEqual(0, len(list(messages)))
 
     def successResponseOnNavigationToHomePage(self):
         response = self.client.get("/")
