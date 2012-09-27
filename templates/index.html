@@ -53,7 +53,15 @@
 		
 				// handler for submissions
                 var doSubmit = function() {
-                    var input = $('input[name="text"]').val();
+                    var input = $('input[name="text"]').val().trim();
+                    if (input == '') {
+                        return;
+                    }
+
+                    if (input.length > 120) {
+                        return;
+                    }
+
                     $.post("/messages", { message: input }, function(data) {
                         $.each(data, function(i, message) {
                             addMessage(message.pk, message.fields.message, formatDate(new Date()));
