@@ -37,6 +37,12 @@
                 registerRemoveHandler(pk);
             };
 
+            function makeSafe(text) {
+                return text.replace(/\W/g, function (chr) {
+                    return '&#' + chr.charCodeAt(0) + ';';
+                });
+            };
+
             $(document).ready(function(){
 				// load all messages when page loads
 				$.get("/messages", function(data) {
@@ -54,6 +60,7 @@
 				// handler for submissions
                 var doSubmit = function() {
                     var input = $('input[name="text"]').val().trim();
+                    input = makeSafe(input);
                     if (input == '') {
                         return;
                     }
