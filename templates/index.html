@@ -19,6 +19,10 @@
             function registerRemoveHandler(pk) {
                 $('div[name="message-' + pk + '"]').find('a').click(function (event) {
                     $(this).parent().animate({ top: -25, opacity: 0 }, 500, function() { $(this).remove(); });
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/messages/" + pk,
+                    });
                 });
             }
             function addMessage(pk, message, time) {
