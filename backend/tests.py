@@ -22,6 +22,7 @@ class SimpleTest(TestCase):
         response = self.client.get("/messages")
         for message in serializers.deserialize("json", response.content):
             self.assertEqual(textToPost, message.object.message)
+            self.assertNotEqual(None, message.object.timestamp)
 
         response = self.client.delete("/messages")
         self.assertEqual(200, response.status_code)

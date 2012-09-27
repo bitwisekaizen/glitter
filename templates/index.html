@@ -2,11 +2,27 @@
 	<head>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<script>
+            function formatDate(messageDate) {
+                var time;
+                var hours = messageDate.getHours();
+                var amOrPm = hours < 11 ? "AM" : "PM";
+                if (hours == 0) {
+                    hours += 12;
+                } else if (hours > 12) {
+                    hours -= 12;
+                }
+                time = hours + ":" + messageDate.getMinutes() + amOrPm + " on " + messageDate.getMonth() + "/" + messageDate.getDay() + "/" + messageDate.getFullYear();
+                return time;
+            }
 			$(document).ready(function(){
 				// load all messages when page loads
 				$.get("/messages", function(data) {
 					$.each(data, function(i, message) {
 						var time = "4:38PM on 9/26/2012";
+                        if (message.fields.timestamp) {
+                            var messageDate = new Date(message.fields.timestamp);
+                            time = formatDate(messageDate);
+                        }
 						$('div[id="messageContainer"]').prepend('<div class="message">' + message.fields.message + '<a href="#" class="delete">x</a><div class="timeStamp">' + time + '</div></div>');
 						
 						$('a').click(function (event) {
@@ -19,7 +35,7 @@
                 var doSubmit = function() {
                     var input = $('input[name="text"]').val();
                     $.post("/messages", { message: input }, function() {
-                        var time = "4:38PM on 9/26/2012";
+                        var time = formatDate(new Date());
                         $newMessageDiv = $('<div class="message">' + input + '<a href="#" class="delete">x</a><div class="timeStamp">' + time + '</div></div>');
 
                         $('div[id="messageContainer"]').prepend($newMessageDiv);
