@@ -19,7 +19,10 @@ class Messages(Resource):
         message = serializers.serialize("json", [Gleet.objects.create(message = request.POST.get('message'))])
         return HttpResponse(message, content_type='application/json', status=200)
 
-    def delete(self, request, *args, **kwargs):
-        for message in Gleet.objects.all():
-            message.delete()
+    def delete(self, request, id=None, **kwargs):
+        if id:
+            Gleet.objects.filter(id=id).delete()
+        else:
+            for message in Gleet.objects.all():
+                message.delete()
         return HttpResponse(status=200)

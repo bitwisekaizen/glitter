@@ -7,7 +7,8 @@ from backend.views import Messages
 
 urlpatterns = patterns('',
     url(r'^$', 'backend.views.index'),
-    url(r'^messages/?', Messages.as_view()),
+    url(r'^messages/(?P<id>\d+)?', Messages.as_view()),
+    url(r'^messages', Messages.as_view()),
     # Examples:
     # url(r'^$', 'glitter.views.home', name='home'),
     # url(r'^glitter/', include('glitter.foo.urls')),
